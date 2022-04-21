@@ -8,7 +8,7 @@ on: push
 
 jobs:
   build-macos:
-    name: Build macOS Packages
+    name: Build MacOS Packages
 
     #macos-10.15
     runs-on: macos-10.15
@@ -22,6 +22,8 @@ jobs:
 
       - name: install deps
         run: |
+          brew install gmp
+          brew install mpfr
           brew install boost
           brew install eigen
           brew install cgal
@@ -137,6 +139,8 @@ jobs:
         uses: actions/checkout@v2
 
       - run: |
+          brew install gmp
+          brew install mpfr
           brew install boost
           brew install cgal
           brew install eigen
