@@ -13,6 +13,12 @@ set(PROJECT_SRCS
 
 add_library(_LunarMP STATIC ${PROJECT_SRCS})
 
+# MPFR
+find_package(CGAL REQUIRED)
+
+# GMP
+find_package(GMP REQUIRED)
+
 # CGAL and its components
 find_package(CGAL REQUIRED)
 target_include_directories(_LunarMP PUBLIC ${CGAL_INCLUDE_DIRS})
