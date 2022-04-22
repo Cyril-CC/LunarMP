@@ -92,6 +92,7 @@ jobs:
       - name: test
         run: |
           gcc -v
+          cmake -v
 #      - name: build for deps
 #        run: sh sh/cmake-deps.sh
 ##      - name: build for LunarMP
