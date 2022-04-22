@@ -78,10 +78,10 @@ jobs:
           token: ${{ secrets.MY_TOKEN }}
           submodules: 'recursive'
 
-      #      - name: Setup MSYS2
-      #        uses: msys2/setup-msys2@v2
-      #        with:
-      #          msystem: MINGW64
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+            msystem: MINGW64
       #          install: >-
       #            mingw-w64-x86_64-gcc
       #            mingw-w64-x86_64-cmake
@@ -89,43 +89,46 @@ jobs:
       #            mingw-w64-x86_64-libjpeg-turbo
       #            mingw-w64-x86_64-libpng
       #            mingw-w64-x86_64-boost
-      - name: build for deps
-        run: sh sh/cmake-deps.sh
-#      - name: build for LunarMP
-#        run: sh sh/cmake-build.sh
-#      - run: ./build/LunarMP.exe version && ./build/LunarMP.exe ptest
-      - run: mkdir output && cp ./build/LunarMP.exe ./output/LunarMP.exe
-
-      - name: import window code-signing
-        uses: GabrielAcostaEngler/signtool-code-sign@main
-        with:
-          certificate: ${{ secrets.CERTIFICATES_P12_WINDOW }}
-          cert-password: ${{ secrets.CERTIFICATES_P12_PASSWORD_WINDOW }}
-          cert-sha1: ${{ secrets.CERTIFICATES_P12_WINDOW_SHA1 }}
-          folder: 'output'
-          recursive: true
-          timestamp-server: 'http://timestamp.digicert.com'
+      - name: test
+        run: |
+          gcc -v
+#      - name: build for deps
+#        run: sh sh/cmake-deps.sh
+##      - name: build for LunarMP
+##        run: sh sh/cmake-build.sh
+##      - run: ./build/LunarMP.exe version && ./build/LunarMP.exe ptest
+#      - run: mkdir output && cp ./build/LunarMP.exe ./output/LunarMP.exe
 #
-#      - run: cp -r ./build/dlls/* ./output/
+#      - name: import window code-signing
+#        uses: GabrielAcostaEngler/signtool-code-sign@main
+#        with:
+#          certificate: ${{ secrets.CERTIFICATES_P12_WINDOW }}
+#          cert-password: ${{ secrets.CERTIFICATES_P12_PASSWORD_WINDOW }}
+#          cert-sha1: ${{ secrets.CERTIFICATES_P12_WINDOW_SHA1 }}
+#          folder: 'output'
+#          recursive: true
+#          timestamp-server: 'http://timestamp.digicert.com'
+##
+##      - run: cp -r ./build/dlls/* ./output/
+##
+#      - name: Zip output
+#        uses: thedoctor0/zip-release@master
+#        with:
+#          type: zip
+#          filename: LunarMP-win64.zip
+#          directory: ./
+#          path: ./output
 #
-      - name: Zip output
-        uses: thedoctor0/zip-release@master
-        with:
-          type: zip
-          filename: LunarMP-win64.zip
-          directory: ./
-          path: ./output
-
-      - name: Upload Release Asset - Windows x64 Binary file
-        id: upload-release-asset-win-x64-binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./LunarMP-win64.zip
-          asset_name: LunarMP-win64.zip
-          asset_content_type: application/octet-stream
+#      - name: Upload Release Asset - Windows x64 Binary file
+#        id: upload-release-asset-win-x64-binary
+#        uses: actions/upload-release-asset@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          upload_url: ${{ github.event.release.upload_url }}
+#          asset_path: ./LunarMP-win64.zip
+#          asset_name: LunarMP-win64.zip
+#          asset_content_type: application/octet-stream
 
 
 #  build-ubuntu:
