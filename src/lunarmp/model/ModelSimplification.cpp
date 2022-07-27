@@ -10,13 +10,13 @@ bool ModelSimplification::readFile(std::string input_file, Mesh& mesh) {
     const std::string filename = CGAL::data_file_path(input_file);
     if (!CGAL::IO::read_polygon_mesh(filename, mesh)) {
         std::cerr << "Invalid input." << std::endl;
-        return EXIT_FAILURE;
+        return false;
     }
     if (!CGAL::is_triangle_mesh(mesh)) {
         std::cerr << "Input geometry is not triangulated." << std::endl;
-        return EXIT_FAILURE;
+        return false;
     }
-    return EXIT_SUCCESS;
+    return true;
 }
 
 typedef typename SMS::GarlandHeckbert_policies<Mesh, K> GH_policies;
@@ -70,7 +70,9 @@ void ModelSimplification::edgeCollapseBoundedNormalChange(Mesh& mesh, double edg
 void ModelSimplification::modelSimplification(std::string input_file, std::string output_file, DataGroup& data_group) {
     Mesh mesh;
 
-    readFile(input_file, mesh);
+    if (!readFile(input_file, mesh)) {
+        exit(-2);
+    }
 
     SimplifyType type = data_group.settings.get<SimplifyType>("simplify_type");
 
