@@ -9,21 +9,19 @@
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Timer.h>
 
-#include <CGAL/IO/polygon_soup_io.h>
-
 #include <string>
 #include <vector>
 
 #include "../utils/logoutput.h"
 #include "../data/DataGroup.h"
+#include "../../rapidjson/rapidjson/document.h"
+#include "../../rapidjson/rapidjson/writer.h"
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel                 K;
-typedef K::Segment_2                                                        Segment_2;
-typedef K::Line_2                                                           Line_2;
-typedef K::Vector_2                                                         Vector_2;
-typedef K::Point_2                                                          Point_2;
 typedef CGAL::Polygon_2<K>                                                  Polygon_2;
-
+typedef K::Segment_2                                                        Segment_2;
+typedef K::Point_2                                                          Point_2;
+typedef Polygon_2::Vertex_iterator                                          VertexIterator;
 namespace lunarmp {
 
 class Plate {
@@ -35,6 +33,8 @@ class Plate {
 };
 
 class Part {
+  private:
+
   public:
     Part() {};
     ~Part() {};
@@ -44,7 +44,7 @@ class Part {
     Point_2 position;
     Point_2 center;
     int angle;
-    bool isPlace;
+    bool inPlace;
     int model_id;
 
     void sort();
@@ -54,22 +54,22 @@ class ModelNesting {
   private:
     double accuracy = 10;
     double min_part_area = 0;
+    int plate_offset = 10;
 
   public:
     std::vector<Part> parts;
     std::vector<Plate> plates;
     std::vector<Part> result_parts;
     int rotate = 360;
-    int plate_offset = 10;
     int offset = 0;
-    int interval = 2;
+//    int interval = 2;
 
 
     bool sortPolygon(Polygon_2 polygon, bool clock_wise);
 
     void sortParts(std::vector<Part>& parts);
 
-    void polygon2Vector(Polygon_2 polygon, std::vector<Vector_2>& vectors);
+    void polygon2Vector(Polygon_2 polygon, std::vector<Point_2>& vectors);
 
     void calculateTraceLine(std::vector<Polygon_2> anglePolygon, std::vector<Polygon_2> linesPolygon, std::vector<Segment_2>& trace_lines);
 
@@ -103,9 +103,7 @@ class ModelNesting {
 
     void startNFP();
 
-    bool readFile();
-
-    bool readFileList(std::string folder_path);
+    bool readFile(std::string input_file);
 
     void writeFile(std::string output_file);
 
